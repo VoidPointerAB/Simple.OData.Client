@@ -203,6 +203,11 @@ namespace Simple.OData.Client.V3.Adapter
             {
                 var items = collectionName.Split('/');
                 collectionName = items.First();
+                if (collectionName.Contains("("))
+                {
+                    collectionName = collectionName.Substring(0, collectionName.IndexOf('('));
+                }
+
                 var derivedTypeName = items.Last();
 
                 if (derivedTypeName.Contains("."))
@@ -223,11 +228,11 @@ namespace Simple.OData.Client.V3.Adapter
                         var derivedType = GetEntityTypes().BestMatch(x => x.Name, derivedTypeName, _session.Pluralizer);
                         if (derivedType != null)
                         {
-                            if (_model.FindDirectlyDerivedTypes(entitySet.ElementType).Contains(derivedType))
-                            {
-                                entityType = derivedType;
-                                return true;
-                            }
+                            //if (_model.FindDirectlyDerivedTypes(entitySet.ElementType).Contains(derivedType))
+                            //{
+                            entityType = derivedType;
+                            return true;
+                            // }
                         }
                     }
                 }
